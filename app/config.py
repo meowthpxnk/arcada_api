@@ -11,3 +11,8 @@ class Config():
     SQLALCHEMY_DATABASE_URI = POSTGRES_URI
     UPLOAD_FOLDER = 'images'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+
+if __name__ == '__main__':
+    print(API_KEY)
+    print(POSTGRES_URI)
