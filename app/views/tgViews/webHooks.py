@@ -1,10 +1,11 @@
 from app import app
+from flask import request
 import requests
 
 @app.route('/tgBot/webHooks', methods=["POST"])
 def tgBotGetHooks():
     token = '5855595896:AAHdnmM-u0PXDAsf0J3N5SbFJIaTIknfpC0'
-    return token
+    # return token
     urlSend = f'https://api.telegram.org/bot{token}/sendMessage'
     data = request.json
     params = {
