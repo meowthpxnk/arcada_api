@@ -8,7 +8,7 @@ def tgBotGetHooks():
     data = request.json
     params = {
         'chat_id': 5693374811,
-        'test': data,
+        'text': data,
     }
-    requsets.get(urlSend, params=params)
+    requests.get(urlSend, params=params)
     return {"ok": True}
