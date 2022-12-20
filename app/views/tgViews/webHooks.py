@@ -1,6 +1,6 @@
 from app import app
-from flask import request
 import requests
+from flask import request
 
 @app.route('/tgBot/webHooks', methods=["POST"])
 def tgBotGetHooks():
@@ -10,7 +10,7 @@ def tgBotGetHooks():
     data = request.json
     params = {
         'chat_id': 5693374811,
-        'text': data,
+        'text': f'DATA: {data}',
     }
     requests.get(urlSend, params=params)
     print(10)
