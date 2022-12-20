@@ -11,4 +11,5 @@ def tgBotGetHooks():
         'text': data,
     }
     requests.get(urlSend, params=params)
+    print(10)
     return {"ok": True}
