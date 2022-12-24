@@ -4,17 +4,17 @@ import random
 from datetime import datetime, timezone
 
 from app import db
-from app.models.Table import Table
+from app.models.Desk import Desk
 
-class TablePrivateKey(db.Model):
+class DeskPrivateKey(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    table_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+    desk_id = db.Column(db.Integer, db.ForeignKey('desk.id'))
     created_time = db.Column(db.DateTime)
     private_key = db.Column(db.String)
 
-    def __init__(self, table_key):
-        table = Table.findByKey(table_key)
-        self.table_id = table.id
+    def __init__(self, desk_key):
+        desk = Desk.findByKey(desk_key)
+        self.desk_id = desk.id
         self.created_time = datetime.now(timezone.utc)
 
         while True:

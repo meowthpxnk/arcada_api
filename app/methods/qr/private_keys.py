@@ -1,33 +1,33 @@
-from app.models.TablePrivateKey import TablePrivateKey
+from app.models.DeskPrivateKey import DeskPrivateKey
 
-def registerPrivateKey(table_key):
-    private_key = TablePrivateKey(table_key)
+def registerPrivateKey(desk_key):
+    private_key = DeskPrivateKey(desk_key)
 
     return {
         "private_key": private_key.private_key,
-        "restaurant_link": private_key.Table.Restaurant.link
+        "restaurant_link": private_key.Desk.Restaurant.link
     }
 
 def checkPrivateKey(private_key, restaurant_link):
-    private_key = TablePrivateKey.getByPrivateKey(private_key)
-    if not private_key.Table.Restaurant.link == restaurant_link:
+    private_key = DeskPrivateKey.getByPrivateKey(private_key)
+    if not private_key.Desk.Restaurant.link == restaurant_link:
         raise "Not valid responce"
 
     return {
         "isActive": private_key.isActive(),
-        "table_number": private_key.Table.number
+        "desk_number": private_key.Desk.number
     }
 
 
-def verificationPrivateKey(private_key, table_key):
-    private_key = TablePrivateKey.getByPrivateKey(private_key)
+def verificationPrivateKey(private_key, desk_key):
+    private_key = DeskPrivateKey.getByPrivateKey(private_key)
 
 
-    if not private_key.Table.key == table_key:
-        raise Exception("Not valid table_key")
+    if not private_key.Desk.key == desk_key:
+        raise Exception("Not valid desk_key")
 
 
     if not private_key.isActive():
         raise Exception("Not active key")
 
-    return {"restaurant_link": private_key.Table.Restaurant.link}
+    return {"restaurant_link": private_key.Desk.Restaurant.link}

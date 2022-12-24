@@ -8,14 +8,14 @@ from app.models.Restaurant import Restaurant
 
 delta = 119
 
-class Table(db.Model):
+class Desk(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     number = db.Column(db.Integer)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))
     key = db.Column(db.String, unique=True)
     call_the_waiter_time = db.Column(db.DateTime)
 
-    categories = db.relationship('TablePrivateKey', backref='Table')
+    categories = db.relationship('DeskPrivateKey', backref='Desk')
 
     def __init__(self, number, restaurant_id):
 
@@ -60,11 +60,11 @@ class Table(db.Model):
 
     @classmethod
     def findByKey(cls, key):
-        table = db.session.query(cls).filter(cls.key == key).first()
-        if not table:
+        desk = db.session.query(cls).filter(cls.key == key).first()
+        if not desk:
             raise "Not exist"
 
-        return table
+        return desk
 
     @classmethod
     def isExisted(cls, number, restaurant_id):

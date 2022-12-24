@@ -1,6 +1,6 @@
-from app.models.Table import Table
+from app.models.Desk import Desk
 from app.methods import parseOrderCart
-from app.models.TablePrivateKey import TablePrivateKey
+from app.models.DeskPrivateKey import DeskPrivateKey
 from app import tg_bot
 
 from app.parse_messages.qr_messages import parseOrderMessage, parseCallWaiterMessage
@@ -8,9 +8,9 @@ from app.parse_messages.qr_messages import parseOrderMessage, parseCallWaiterMes
 
 def sendOrder(private_key, order_info):
 
-    private_key = TablePrivateKey.getByPrivateKey(private_key)
-    table = private_key.Table
-    restaurant = table.Restaurant
+    private_key = DeskPrivateKey.getByPrivateKey(private_key)
+    desk = private_key.Desk
+    restaurant = desk.Restaurant
 
     restaurant_chat_id = restaurant.telegram_channel
 
@@ -20,9 +20,9 @@ def sendOrder(private_key, order_info):
     cart = parseOrderCart(order_info['cart'])
     name = order_info['name']
     comment = order_info['comment']
-    table_number = table.number
+    desk_number = desk.number
 
-    message = parseOrderMessage(table_number, name, cart, comment)
+    message = parseOrderMessage(desk_number, name, cart, comment)
     # print(message)
     # responce = {}
 
@@ -37,9 +37,9 @@ def sendOrder(private_key, order_info):
     return {"status": "SEND"}
 
 def callTheWaiter(private_key):
-    private_key = TablePrivateKey.getByPrivateKey(private_key)
-    table = private_key.Table
-    restaurant = table.Restaurant
+    private_key = DeskPrivateKey.getByPrivateKey(private_key)
+    desk = private_key.Desk
+    restaurant = desk.Restaurant
 
     restaurant_chat_id = restaurant.telegram_channel
 
@@ -47,12 +47,12 @@ def callTheWaiter(private_key):
         raise Exception("SEND_ERROR")
 
     try:
-        table.callTheWaiter()
+        desk.callTheWaiter()
     except:
-        waiting_time = table.getSecondsFromCallWithDelta()
+        waiting_time = desk.getSecondsFromCallWithDelta()
         return {"status": "WAIT_ERROR", "waiting_time": waiting_time}
 
-    message = parseCallWaiterMessage(table.number)
+    message = parseCallWaiterMessage(desk.number)
 
     try:
         responce = tg_bot.sendMessage(chat_id = restaurant_chat_id, text = message)
@@ -61,4 +61,4 @@ def callTheWaiter(private_key):
     except:
         return {"status": "SEND_ERROR"}
 
-    return {"status": "SUCCESS", "delta": Table.getDelta()}
+    return {"status": "SUCCESS", "delta": desk.getDelta()}

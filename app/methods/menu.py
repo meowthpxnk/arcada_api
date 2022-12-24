@@ -1,6 +1,5 @@
 from app import db
 
-import app.models as models
 from app.methods.restaurants import getRestaurantViaLink
 from app.models.Restaurant import Restaurant
 

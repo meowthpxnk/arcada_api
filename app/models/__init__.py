@@ -6,5 +6,5 @@ from . import Restaurant
 from . import Customer
 from . import Address
 from . import OrderDish
-from . import Table
-from . import TablePrivateKey
+from . import Desk
+from . import DeskPrivateKey

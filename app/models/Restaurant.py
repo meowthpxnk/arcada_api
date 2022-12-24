@@ -1,8 +1,6 @@
 from app import db
 from app.methods import parseTitle
 
-
-
 class Restaurant(db.Model):
 
 
@@ -23,7 +21,7 @@ class Restaurant(db.Model):
 
     categories = db.relationship('Category', backref='Restaurant')
     orders = db.relationship('Order', backref='Restaurant')
-    tables = db.relationship('Table', backref='Restaurant')
+    desks = db.relationship('Desk', backref='Restaurant')
 
     is_online = db.Column(db.Boolean, default=False)
 

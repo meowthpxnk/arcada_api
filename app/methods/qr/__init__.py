@@ -1,2 +1,2 @@
 from .private_keys import *
-from .table_actions import *
+from .desk_actions import *

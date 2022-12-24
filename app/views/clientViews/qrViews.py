@@ -14,8 +14,8 @@ from app.methods.qr import verificationPrivateKey as method_verificationPrivateK
 def registerPrivateKey():
     try:
         data = request.json
-        table_key = data["table_key"]
-        result = method_registerPrivateKey(table_key)
+        desk_key = data["desk_key"]
+        result = method_registerPrivateKey(desk_key)
     except Exception as e:
         return {"ok": False, "error": f"{e}"}
 
@@ -64,8 +64,8 @@ def callTheWaiter():
 def verificationPrivateKey():
     try:
         private_key = request.args.get('private_key')
-        table_key = request.args.get('table_key')
-        result = method_verificationPrivateKey(private_key, table_key)
+        desk_key = request.args.get('desk_key')
+        result = method_verificationPrivateKey(private_key, desk_key)
     except Exception as e:
         return {"ok": False, "error": f"{e}"}
     return {"ok": True, "result": result}
