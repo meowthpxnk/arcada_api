@@ -6,6 +6,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
 
+from tg_bot import TgBot
+
 from app.console.console_logs import ConsoleLogs
 
 
@@ -13,13 +15,15 @@ app = Flask(__name__)
 
 CORS(app)
 cors = CORS(app, resources = {
-    r"/*":{
+    r"*":{
         "origins": "*"
     }
 })
 
 app.config.from_object('app.config.Config')
 socket = SocketIO(app, cors_allowed_origins="*")
+
+tg_bot = TgBot(app.config["TG_API_TOKEN"])
 
 app_ctx = app.app_context()
 app_ctx.push()

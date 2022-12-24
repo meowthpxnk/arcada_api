@@ -58,9 +58,6 @@ from app.methods import deleteDish as deleteDishMethod
 
 @app.route('/dashboard/deleteDish', methods=['POST'])
 def deleteDish():
-    print(123)
-    print(request)
-    print(request.json)
     verification = checkAPIkey(request.args.get("API_KEY"))
     if verification["ok"] == False:
         return {"ok": True, "error": verification["error"]}

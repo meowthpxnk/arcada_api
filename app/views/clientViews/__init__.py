@@ -6,3 +6,5 @@ from .getOrder import *
 
 from .getUTCTime import *
 from .payOrderAfterGetting import *
+
+from .qrViews import *

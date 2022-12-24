@@ -5,6 +5,7 @@ from app.methods import parseTitle
 
 class Restaurant(db.Model):
 
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
     link = db.Column(db.String, unique=True)
@@ -18,9 +19,11 @@ class Restaurant(db.Model):
     delivery_fee = db.Column(db.Integer)
     free_delivery_price = db.Column(db.Integer)
 
-    categories = db.relationship('Category', backref='Restaurant')
+    telegram_channel = db.Column(db.String)
 
+    categories = db.relationship('Category', backref='Restaurant')
     orders = db.relationship('Order', backref='Restaurant')
+    tables = db.relationship('Table', backref='Restaurant')
 
     is_online = db.Column(db.Boolean, default=False)
 
@@ -117,3 +120,17 @@ class Restaurant(db.Model):
 
         db.session.delete(self)
         db.session.commit()
+
+    @classmethod
+    def findById(cls, id):
+        restaurant = db.session.query(cls).filter(cls.id == id).first()
+        if not restaurant:
+            raise "Not exist"
+        return restaurant
+
+    @classmethod
+    def findByLink(cls, link):
+        restaurant = db.session.query(cls).filter(cls.link == link).first()
+        if not restaurant:
+            raise "Not exist"
+        return restaurant

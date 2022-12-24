@@ -127,3 +127,10 @@ class Dish(db.Model):
     def delete(self):
         self.category_id = None
         db.session.commit()
+
+    @classmethod
+    def findById(cls, id):
+        dish = db.session.query(cls).filter(cls.id == id).first()
+        if not dish:
+            raise "Not exist"
+        return dish
