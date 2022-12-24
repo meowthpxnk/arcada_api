@@ -1,17 +1,18 @@
 from app import app
+from app import tg_bot
 import requests
 from flask import request
+from app.parse_messages.qr_messages import parseChatIdMessage
 
 @app.route('/tgBot/webHooks', methods=["POST"])
 def tgBotGetHooks():
-    token = '5855595896:AAHdnmM-u0PXDAsf0J3N5SbFJIaTIknfpC0'
-    # return token
-    urlSend = f'https://api.telegram.org/bot{token}/sendMessage'
     data = request.json
-    params = {
-        'chat_id': 5693374811,
-        'text': f'DATA: {data}',
-    }
-    requests.get(urlSend, params=params)
-    print(10)
+    if "my_chat_member" in data:
+        try:
+            chat_id = data["my_chat_member"]["chat"]["id"]
+            text = parseChatIdMessage(chat_id)
+            tg_bot.sendMessage(chat_id = id, text = text)
+        except:
+            return {"ok": False}
+
     return {"ok": True}
