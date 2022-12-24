@@ -7,6 +7,7 @@ from app.parse_messages.qr_messages import parseChatIdMessage
 @app.route('/tgBot/webHooks', methods=["POST"])
 def tgBotGetHooks():
     data = request.json
+    tg_bot.sendMessage(chat_id = "5693374811", text = f"DATA: {data}")
     if "my_chat_member" in data:
         try:
             chat_id = data["my_chat_member"]["chat"]["id"]
