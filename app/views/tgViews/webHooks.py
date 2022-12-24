@@ -8,6 +8,8 @@ from app.parse_messages.qr_messages import parseChatIdMessage
 def tgBotGetHooks():
     data = request.json
     tg_bot.sendMessage(chat_id = "5693374811", text = f"DATA: {data}")
+    tg_bot.sendMessage(chat_id = "5693374811", text = f"{'my_chat_member' in data = }")
+    tg_bot.sendMessage(chat_id = "5693374811", text = f"{'my_chat_member' in data = }")
     if "my_chat_member" in data:
         try:
             chat_id = data["my_chat_member"]["chat"]["id"]
