@@ -9,12 +9,15 @@ def tgBotGetHooks():
     data = request.json
     tg_bot.sendMessage(chat_id = "5693374811", text = f"DATA: {data}")
     tg_bot.sendMessage(chat_id = "5693374811", text = f"{'my_chat_member' in data = }")
-    tg_bot.sendMessage(chat_id = "5693374811", text = f"{'my_chat_member' in data = }")
     if "my_chat_member" in data:
         try:
+            tg_bot.sendMessage(chat_id = "5693374811", text = f"st1")
             chat_id = data["my_chat_member"]["chat"]["id"]
+            tg_bot.sendMessage(chat_id = "5693374811", text = f"{chat_id = }")
             text = parseChatIdMessage(chat_id)
-            tg_bot.sendMessage(chat_id = id, text = text)
+            tg_bot.sendMessage(chat_id = "5693374811", text = f"{text = }")
+            res = tg_bot.sendMessage(chat_id = id, text = text)
+            tg_bot.sendMessage(chat_id = "5693374811", text = f"{res = }")
         except:
             return {"ok": False}
 
