@@ -23,12 +23,10 @@ def getDashboardRestaurants():
 
     restaurants  = db.session.query(Restaurant).all()
 
-    dump = []
-
-    for restaurant in restaurants:
-        dump.append(restaurant.getInfo())
-
-    return {"ok": True, "restaurants": dump}
+    return {
+        "ok": True,
+        "restaurants": [restaurant.getInfo() for restaurant in restaurants]
+    }
 
 @app.route('/dashboard/getMenu/<restaurant_id>', methods=['GET'])
 def getDashboardMenu(restaurant_id):
@@ -43,9 +41,19 @@ def getDashboardMenu(restaurant_id):
         "categories": [],
     }
 
+    desks = [desk.getInfo() for desk in restaurant.desks]
+    telegram_channel = restaurant.telegram_channel
+    enabled_qr_menu = restaurant.is_online_qr_menu
+
     for category in restaurant.categories:
         menu["categories"].append(category.getInfo())
         for dish in category.dishes:
             menu["dishes"].append(dish.getInfo())
 
-    return {"ok": True, "menu": menu}
+    return {
+        "ok": True,
+        "menu": menu,
+        "desks": desks,
+        "telegram_channel": telegram_channel,
+        "enabled_qr_menu": enabled_qr_menu
+    }

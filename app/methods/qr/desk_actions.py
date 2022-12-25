@@ -1,3 +1,4 @@
+from app import db
 from app.models.Desk import Desk
 from app.methods import parseOrderCart
 from app.models.DeskPrivateKey import DeskPrivateKey
@@ -13,6 +14,11 @@ def sendOrder(private_key, order_info):
     restaurant = desk.Restaurant
 
     restaurant_chat_id = restaurant.telegram_channel
+
+    try:
+        private_key.tryCreateOrder()
+    except:
+        return {"status": "TOO_MANY_REQUESTS", "waiting_time": private_key.waiting_time()}
 
     if restaurant_chat_id == "" or restaurant_chat_id == None:
         raise Exception("SEND_ERROR")
@@ -33,6 +39,7 @@ def sendOrder(private_key, order_info):
     except:
         raise Exception("SEND_ERROR")
 
+    private_key.createOrder()
 
     return {"status": "SEND"}
 
@@ -47,7 +54,7 @@ def callTheWaiter(private_key):
         raise Exception("SEND_ERROR")
 
     try:
-        desk.callTheWaiter()
+        desk.tryCallTheWaiter()
     except:
         waiting_time = desk.getSecondsFromCallWithDelta()
         return {"status": "WAIT_ERROR", "waiting_time": waiting_time}
@@ -60,5 +67,7 @@ def callTheWaiter(private_key):
             raise Exception("SEND_ERROR")
     except:
         return {"status": "SEND_ERROR"}
+
+    desk.callTheWaiter()
 
     return {"status": "SUCCESS", "delta": desk.getDelta()}

@@ -6,7 +6,9 @@ from datetime import datetime, timezone
 from app import db
 from app.models.Restaurant import Restaurant
 
-delta = 119
+from app.settings import Settings
+
+order_delta = Settings.DESK_DELTA
 
 class Desk(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -15,7 +17,7 @@ class Desk(db.Model):
     key = db.Column(db.String, unique=True)
     call_the_waiter_time = db.Column(db.DateTime)
 
-    categories = db.relationship('DeskPrivateKey', backref='Desk')
+    private_keys = db.relationship('DeskPrivateKey', backref='Desk')
 
     def __init__(self, number, restaurant_id):
 
@@ -43,20 +45,30 @@ class Desk(db.Model):
         return (now - self.call_the_waiter_time).seconds
 
     def getSecondsFromCallWithDelta(self):
-        return delta - self.getSecondsFromCall()
+        return order_delta - self.getSecondsFromCall()
 
 
     def callTheWaiter(self):
-        if self.canCallTheWaiter(self.getSecondsFromCall()):
-            raise "Too fast call the waiter"
         self.call_the_waiter_time = datetime.now(timezone.utc)
         db.session.commit()
+
+    def tryCallTheWaiter(self):
+        if self.canCallTheWaiter(self.getSecondsFromCall()):
+            raise "Too fast call the waiter"
+        return
 
     def create(restaurant):
         ...
 
     def delete(self):
         db.session.delete(self)
+        db.session.commit()
+
+    def getInfo(self):
+        return {
+            "number": self.number,
+            "key": self.key,
+        }
 
     @classmethod
     def findByKey(cls, key):
@@ -77,9 +89,9 @@ class Desk(db.Model):
         return ''.join(random.choice(chars) for _ in range(size))
 
     @staticmethod
-    def canCallTheWaiter(second_from_call, delta=delta):
+    def canCallTheWaiter(second_from_call, delta=order_delta):
         return not second_from_call > delta
 
     @staticmethod
     def getDelta():
-        return delta
+        return order_delta

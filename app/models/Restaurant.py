@@ -24,6 +24,7 @@ class Restaurant(db.Model):
     desks = db.relationship('Desk', backref='Restaurant')
 
     is_online = db.Column(db.Boolean, default=False)
+    is_online_qr_menu = db.Column(db.Boolean, default=False)
 
     def __init__(self, restaurant):
 
@@ -52,6 +53,7 @@ class Restaurant(db.Model):
         db.session.commit()
 
     def getInfo(self):
+
         return {
             "title": self.title,
             "link": self.link,
@@ -64,6 +66,9 @@ class Restaurant(db.Model):
             "banner": self.banner,
             "free_delivery_price": self.free_delivery_price,
             "delivery_fee": self.delivery_fee,
+            "is_online_qr_menu": self.is_online_qr_menu,
+            "telegram_channel": self.telegram_channel,
+            "desks": [desk.getInfo() for desk in self.desks]
         }
 
     def create(restaurant):
@@ -84,6 +89,22 @@ class Restaurant(db.Model):
     def deleteBanner(self):
         self.banner = None
         db.session.commit()
+
+    def changeTurnOfQrMenu(self):
+        self.is_online_qr_menu = not self.is_online_qr_menu
+        db.session.commit()
+
+    def changeTelegramId(self, telegram_channel_id):
+        self.telegram_channel = telegram_channel_id
+        db.session.commit()
+
+    # def enableQrMenu(self):
+    #     self.is_online_qr_menu = True
+    #     db.session.commit()
+    #
+    # def disableQrMenu(self):
+    #     self.is_online_qr_menu = False
+    #     db.session.commit()
 
     def edit(self, restaurant):
 
