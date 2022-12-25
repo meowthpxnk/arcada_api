@@ -28,7 +28,7 @@ class Desk(db.Model):
 
         self.number = number
         self.restaurant_id = restaurant.id
-        self.call_the_waiter_time = datetime.now(timezone.utc)
+        self.call_the_waiter_time = datetime.now(timezone.utc).replace(tzinfo=None)
 
         while True:
             try:
@@ -49,7 +49,7 @@ class Desk(db.Model):
 
 
     def callTheWaiter(self):
-        self.call_the_waiter_time = datetime.now(timezone.utc)
+        self.call_the_waiter_time = datetime.now(timezone.utc).replace(tzinfo=None)
         db.session.commit()
 
     def tryCallTheWaiter(self):

@@ -22,7 +22,7 @@ class DeskPrivateKey(db.Model):
     def __init__(self, desk_key):
         desk = Desk.findByKey(desk_key)
         self.desk_id = desk.id
-        self.created_time = datetime.now(timezone.utc)
+        self.created_time = datetime.now(timezone.utc).replace(tzinfo=None)
 
         while True:
             try:
@@ -43,9 +43,9 @@ class DeskPrivateKey(db.Model):
         return self.calculateTime(self.created_time, private_key_delta)
 
     def createOrder(self):
-        self.create_order_time = datetime.now(timezone.utc)
+        self.create_order_time = datetime.now(timezone.utc).replace(tzinfo=None)
         db.session.commit()
-    
+
     def tryCreateOrder(self):
         now = datetime.now(timezone.utc).replace(tzinfo=None)
 
