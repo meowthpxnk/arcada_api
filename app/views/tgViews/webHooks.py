@@ -3,6 +3,7 @@ from app import tg_bot
 import requests
 from flask import request
 from app.parse_messages.qr_messages import parseChatIdMessage
+import json
 
 @app.route('/tgBot/webHooks', methods=["POST"])
 def tgBotGetHooks():
