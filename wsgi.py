@@ -6,4 +6,4 @@ import os
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        app.run(host='172.20.10.7', port=5000)
+        app.run()
