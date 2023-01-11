@@ -10,7 +10,6 @@ __pycache__/
 
 # C extensions
 *.so
-*.png
 
 
 migrations
@@ -160,3 +159,7 @@ pip-selfcheck.json
 
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+
+images/banners/*.png
+images/dishes/*.png
+images/restaurant/*.png
