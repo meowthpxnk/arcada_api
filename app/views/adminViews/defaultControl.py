@@ -44,6 +44,7 @@ def getDashboardMenu(restaurant_id):
     desks = [desk.getInfo() for desk in restaurant.desks]
     telegram_channel = restaurant.telegram_channel
     enabled_qr_menu = restaurant.is_online_qr_menu
+    telegram_admin_id = restaurant.telegram_admin_id
 
     for category in restaurant.categories:
         menu["categories"].append(category.getInfo())
@@ -55,5 +56,6 @@ def getDashboardMenu(restaurant_id):
         "menu": menu,
         "desks": desks,
         "telegram_channel": telegram_channel,
-        "enabled_qr_menu": enabled_qr_menu
+        "enabled_qr_menu": enabled_qr_menu,
+        "telegram_admin_id": telegram_admin_id,
     }

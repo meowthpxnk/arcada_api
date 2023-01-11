@@ -12,6 +12,8 @@ from app.methods import deleteRestaurant as deleteRestaurantMethod
 from app.methods import setBannerToRestaurant as setBannerToRestaurantMethod
 from app.methods import deleteBannerToRestaurant as deleteBannerToRestaurantMethod
 
+from app.methods import changeTelegramAdmin as method_changeTelegramAdmin
+
 from app.methods import checkAPIkey
 
 
@@ -122,3 +124,26 @@ def deleteBannerToRestaurant():
 
 
     return {"ok": True, "restaurant": restaurant}
+
+
+
+@app.route('/dashboard/changeTelegramAdmin/<restaurant_id>', methods=['POST'])
+def changeTelegramAdmin(restaurant_id):
+
+    verification = checkAPIkey(request.args.get("API_KEY"))
+    if verification["ok"] == False:
+        return {"ok": False, "error": verification["error"]}
+
+    print("------GET_INFO-------")
+    print(request)
+    print(request.json)
+    print("------GET_INFO-------")
+
+
+    try:
+        data = request.json
+        telegram_admin_id = data["telegram_admin_id"]
+        result = method_changeTelegramAdmin(restaurant_id, telegram_admin_id)
+    except Exception as e:
+        return {"ok": False, "error": f"{e}"}
+    return {"ok": True, "result": result}

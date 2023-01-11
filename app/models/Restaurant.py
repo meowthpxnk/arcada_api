@@ -19,6 +19,8 @@ class Restaurant(db.Model):
 
     telegram_channel = db.Column(db.String)
 
+    telegram_admin_id = db.Column(db.String)
+
     categories = db.relationship('Category', backref='Restaurant')
     orders = db.relationship('Order', backref='Restaurant')
     desks = db.relationship('Desk', backref='Restaurant')
@@ -96,6 +98,10 @@ class Restaurant(db.Model):
 
     def changeTelegramId(self, telegram_channel_id):
         self.telegram_channel = telegram_channel_id
+        db.session.commit()
+
+    def changeTelegramAdminId(self, telegram_admin_id):
+        self.telegram_admin_id = telegram_admin_id
         db.session.commit()
 
     # def enableQrMenu(self):

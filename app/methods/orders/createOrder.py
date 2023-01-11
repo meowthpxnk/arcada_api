@@ -1,4 +1,4 @@
-from app import db
+from app import db, tg_bot
 from app.models.Order import Order
 from app.models.Dish import Dish
 from app.models.Customer import Customer
@@ -8,6 +8,8 @@ from app.models.Dish import Dish
 from app.models.OrderDish import OrderDish
 
 from app.console import ConsoleLogs
+
+from .parseOrderCart import parseOrderCartText
 
 from secrets import token_urlsafe as generateSecretKey
 
@@ -41,9 +43,13 @@ def createOrder(request):
     db.session.add(customer)
     db.session.commit()
 
+    address = None
+    address_text = None
+
     if (delivery_type == "DELIVERY"):
         address = user_data["address"]
         address = Address(address, customer.id)
+        address_text = user_data["address_text"]
         db.session.add(address)
         db.session.commit()
 
@@ -64,10 +70,23 @@ def createOrder(request):
 
         total_cart_price += get_dish.price * dish["counter"]
 
-    ConsoleLogs.PRINT(f"{total_cart_price }")
-    ConsoleLogs.PRINT(f"{restaurant.free_delivery_price }")
+    # ConsoleLogs.PRINT(f"{total_cart_price }")
+    # ConsoleLogs.PRINT(f"{restaurant.free_delivery_price }")
 
-    order.delivery_fee = restaurant.delivery_fee if ((order.delivery_type == "DELIVERY") and (total_cart_price < restaurant.free_delivery_price)) else 0
+    delivery_fee = restaurant.delivery_fee if ((order.delivery_type == "DELIVERY") and (total_cart_price < restaurant.free_delivery_price)) else 0
+    order.delivery_fee = delivery_fee
     db.session.commit()
+
+
+    try:
+        responce = tg_bot.sendMessage(
+            chat_id = restaurant.telegram_admin_id,
+            text = parseOrderCartText(dishes, user_data['phone'], user_data['name'], address_text, delivery_type, total_cart_price + delivery_fee, comment),
+            parse_mode = "HTML"
+        )
+        if not responce["ok"]:
+            raise Exception("SEND_ERROR")
+    except:
+        raise Exception("SEND_ERROR")
 
     return {'order_id': order.id, 'secret_key': order.secret_key}

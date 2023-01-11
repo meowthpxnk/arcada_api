@@ -1,5 +1,6 @@
 from app import db
 from . import Dish
+from app.methods import getUTCTime
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -20,7 +21,12 @@ class Order(db.Model):
         self.comment = comment
         self.delivery_type = delivery_type
         self.secret_key = secret_key
-        self.status = "WAIT_FOR_PAY"
+        self.status = "WAIT_FOR_DELIVERY"
+        now_time = getUTCTime()
+        now_time = (now_time['hour']*60)+now_time['minute']+(10*60)
+        if now_time > 1439:
+            now_time -= 1440
+        self.paidTime = now_time
         # db.session.add(self)
         # db.session.commit()
 
