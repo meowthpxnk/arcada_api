@@ -1,8 +1,9 @@
 from app import db
 from app.models.Desk import Desk
-from app.methods import parseOrderCart
+from app.parse_messages import parseOrderCart
 from app.models.DeskPrivateKey import DeskPrivateKey
 from app import tg_bot
+from app.parse_messages.reply_markups import qr_request_status_keyboard
 
 from app.parse_messages.qr_messages import parseOrderMessage, parseCallWaiterMessage
 
@@ -33,10 +34,14 @@ def sendOrder(private_key, order_info):
     # responce = {}
 
     try:
-        responce = tg_bot.sendMessage(chat_id = restaurant_chat_id, text = message)
-        if not responce["ok"]:
-            raise Exception("SEND_ERROR")
-    except:
+        tg_bot.send_message(
+            chat_id = restaurant_chat_id,
+            text = message,
+            parse_mode = "HTML",
+            reply_markup = qr_request_status_keyboard
+        )
+    except Exception as e:
+        print(e)
         raise Exception("SEND_ERROR")
 
     private_key.createOrder()
@@ -62,9 +67,7 @@ def callTheWaiter(private_key):
     message = parseCallWaiterMessage(desk.number)
 
     try:
-        responce = tg_bot.sendMessage(chat_id = restaurant_chat_id, text = message)
-        if not responce["ok"]:
-            raise Exception("SEND_ERROR")
+        tg_bot.send_message(chat_id = restaurant_chat_id, text = message, parse_mode = "HTML")
     except:
         return {"status": "SEND_ERROR"}
 

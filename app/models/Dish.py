@@ -16,6 +16,9 @@ class Dish(db.Model):
     portion = db.Column(db.String)
 
 
+    is_full_menu = db.Column(db.Boolean, default = True)
+
+
     ingredients = db.relationship('Ingredient', secondary=dish_ingredient, backref='Dish')
 
     orders = db.relationship('OrderDish', backref='Dish')
@@ -24,6 +27,7 @@ class Dish(db.Model):
         self.title = dish["title"]
         self.price = dish["price"]
         self.category_id = dish["category_id"]
+        self.is_full_menu = dish["is_full_menu"]
 
         if "photo" in dish:
             self.photo = dish["photo"]
@@ -98,6 +102,7 @@ class Dish(db.Model):
             "portion": self.portion,
             "ingredients": self.getIngredients(),
             "price": self.price,
+            "is_full_menu": self.is_full_menu,
         }
 
         return dish
@@ -121,6 +126,9 @@ class Dish(db.Model):
 
         if "full_title" in dish:
             self.full_title = dish["full_title"]
+
+        if "is_full_menu" in dish:
+            self.is_full_menu = dish["is_full_menu"]
 
         db.session.commit()
 

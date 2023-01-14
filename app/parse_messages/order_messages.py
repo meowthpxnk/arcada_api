@@ -1,5 +1,8 @@
 from app.models.Dish import Dish
 
+from .text_parsers import parseTitle
+
+
 def parseOrderCart(cart):
     dump = []
 
@@ -7,14 +10,13 @@ def parseOrderCart(cart):
         print(f"{item}")
         dish = Dish.findById(item["id"])
         dump.append({
-            "title": dish.title,
+            "title": parseTitle(dish.title),
             "price": dish.price,
             "counter": item["counter"],
         })
     return dump
 
-
-def parseOrderCartText(dishes, phone_number, name, address, delivery_type, total_amount, comment):
+def parseOrderCartText(dishes, phone_number, name, address, delivery_type, total_amount, comment, restaurant_title):
     parsedCart = parseOrderCart(dishes)
 
 
@@ -24,6 +26,7 @@ def parseOrderCartText(dishes, phone_number, name, address, delivery_type, total
 
     total_amount = str(total_amount // 100) + "." + str(total_amount % 100)
 
+    text += f"<b>Ресторан</b>:\n{restaurant_title}\n\n"
     text += f"<b>Номер телефона</b>:\n{phone_number}\n\n"
     text += f"<b>Имя заказчика</b>:\n{name}\n\n"
     text += f"<b>Тип заказа</b>:\n{delivery_type}\n\n"
@@ -31,12 +34,13 @@ def parseOrderCartText(dishes, phone_number, name, address, delivery_type, total
     if address:
         text += f"<b>Адрес доставки</b>:\n{address}\n\n"
 
+    comment = None if not comment else comment
     text += f"<b>Комментарий</b>:\n{comment}\n\n"
 
     text += "<b>Блюда в заказе</b>\n"
 
 
     for item in parsedCart:
-        text += f"{item['title']}: {item['counter']}\n"
+        text += f"{item['title']} / <b>кол-во: {item['counter']}</b>\n"
 
     return text

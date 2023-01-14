@@ -9,7 +9,7 @@ from app.models.OrderDish import OrderDish
 
 from app.console import ConsoleLogs
 
-from .parseOrderCart import parseOrderCartText
+from app.parse_messages import parseOrderCartText
 
 from secrets import token_urlsafe as generateSecretKey
 
@@ -77,15 +77,14 @@ def createOrder(request):
     order.delivery_fee = delivery_fee
     db.session.commit()
 
+    restaurant_title = restaurant.title
 
     try:
-        responce = tg_bot.sendMessage(
+        tg_bot.send_message(
             chat_id = restaurant.telegram_admin_id,
-            text = parseOrderCartText(dishes, user_data['phone'], user_data['name'], address_text, delivery_type, total_cart_price + delivery_fee, comment),
+            text = parseOrderCartText(dishes, user_data['phone'], user_data['name'], address_text, delivery_type, total_cart_price + delivery_fee, comment, restaurant_title),
             parse_mode = "HTML"
         )
-        if not responce["ok"]:
-            raise Exception("SEND_ERROR")
     except:
         raise Exception("SEND_ERROR")
 

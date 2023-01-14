@@ -11,9 +11,7 @@ def changeTelegramAdmin(restaurant_id, telegram_admin_id):
         raise Exception("Not existed restaurant")
 
     try:
-        responce = tg_bot.sendMessage(chat_id = telegram_admin_id, text = "test message")
-        if not responce["ok"]:
-            raise Exception("SEND_ERROR")
+        tg_bot.send_message(chat_id = telegram_admin_id, text = "Тестовое сообщение", parse_mode = "HTML")
     except:
         raise Exception("SEND_ERROR")
 

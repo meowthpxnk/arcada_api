@@ -1,6 +1,6 @@
 from app import db
 
-from app.methods.restaurants import getRestaurantViaLink
+from app.methods.restaurants import getRestaurantViaLink, getQrRestaurantViaLink
 from app.models.Restaurant import Restaurant
 
 from app.methods.additional import isPathValid
@@ -52,6 +52,42 @@ def getMenu(restaurant_link):
         return {"error": "PATH_NOT_VALID"}
 
     restaurant = getRestaurantViaLink(restaurant_link)
+
+    if restaurant == None:
+        return {"error" : "RESTAURANT_NOT_EXISTED"}
+
+    banners = getBannersViaRestaurant(restaurant.id)
+
+    another_restaurants = getAnotherRestaurants(restaurant.id)
+
+    dump_object = {
+        "restaurant" : {},
+        "categories" : [],
+        "dishes": [],
+        "banners": banners,
+        "another_restaurants": another_restaurants,
+    }
+
+    dump_object["restaurant"] = restaurant.getInfo()
+
+    for category in restaurant.categories:
+        dump_object["categories"].append(category.getInfo())
+
+        for dish in category.dishes:
+            if dish.is_full_menu:
+                continue
+            dump_object["dishes"].append(dish.getInfo())
+
+
+    return dump_object
+
+
+def getQrMenu(restaurant_link):
+    if not isPathValid(restaurant_link):
+        return {"error": "PATH_NOT_VALID"}
+
+    restaurant = getQrRestaurantViaLink(restaurant_link)
+
 
     if restaurant == None:
         return {"error" : "RESTAURANT_NOT_EXISTED"}

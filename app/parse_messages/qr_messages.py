@@ -1,12 +1,13 @@
+from .text_parsers import parseTitle
 
 def parseOrderMessage(desk_number, name, cart, comment):
-    cart_txt = "".join(f"{dish['title']} x{dish['counter']}\n" for dish in cart)
-    # print(cart)
-    # cart_txt = "sad"
-    return f"Заказ у стола #{desk_number}\nИмя клиента: {name}\nКомментарий к заказу: {comment}\nБлюда в заказе:\n{cart_txt}"
+    comment = None if not comment else comment
+    cart_txt = "".join(f"{parseTitle(dish['title'])} x<b>{dish['counter']}</b>\n" for dish in cart)
+    text = f"<b>Заказ у стола #{desk_number}</b>\n\n<b>Имя клиента</b>:\n{name}\n\n<b>Комментарий к заказу:</b>\n{comment}\n\n<b>Блюда в заказе:</b>\n{cart_txt}"
+    return text
 
 def parseCallWaiterMessage(desk_number):
-    return f"Зовут официанта за стол #{desk_number}"
+    return f"Зовут официанта за стол <b>#{desk_number}</b>"
 
 def parseChatIdMessage(chat_id):
     return f"ID вашего канала 😀:\n{chat_id}"
