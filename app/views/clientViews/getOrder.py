@@ -9,6 +9,8 @@ def getOrder(id):
     if (secret_key):
         order = getOrderMethod(id, secret_key)
 
+        print(order)
+
         if(order != "error_secret_key"):
             return {"ok": True, "dump": order}
 

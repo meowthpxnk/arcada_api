@@ -27,6 +27,7 @@ class Order(db.Model):
         if now_time > 1439:
             now_time -= 1440
         self.paidTime = now_time
+        self.delivery_fee = 0
         # db.session.add(self)
         # db.session.commit()
 

@@ -8,5 +8,4 @@ from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 qr_request_status_keyboard = InlineKeyboardMarkup() \
     .add(
         InlineKeyboardButton("✅Принять", callback_data="qr_accept"),
-        InlineKeyboardButton("🚫Отклонить", callback_data="qr_decline")
     )

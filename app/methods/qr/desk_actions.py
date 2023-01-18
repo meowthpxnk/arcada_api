@@ -67,7 +67,7 @@ def callTheWaiter(private_key):
     message = parseCallWaiterMessage(desk.number)
 
     try:
-        tg_bot.send_message(chat_id = restaurant_chat_id, text = message, parse_mode = "HTML")
+        tg_bot.send_message(chat_id = restaurant_chat_id, text = message, parse_mode = "HTML", reply_markup = qr_request_status_keyboard)
     except:
         return {"status": "SEND_ERROR"}
 

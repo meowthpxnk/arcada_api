@@ -46,12 +46,18 @@ def createOrder(request):
     address = None
     address_text = None
 
+    # delivery_fee = 0
+
     if (delivery_type == "DELIVERY"):
         address = user_data["address"]
         address = Address(address, customer.id)
         address_text = user_data["address_text"]
+
         db.session.add(address)
         db.session.commit()
+
+
+
 
     order = Order(customer.id, restaurant.id, comment, delivery_type, secret_key)
 
@@ -73,7 +79,7 @@ def createOrder(request):
     # ConsoleLogs.PRINT(f"{total_cart_price }")
     # ConsoleLogs.PRINT(f"{restaurant.free_delivery_price }")
 
-    delivery_fee = restaurant.delivery_fee if ((order.delivery_type == "DELIVERY") and (total_cart_price < restaurant.free_delivery_price)) else 0
+    delivery_fee = restaurant.delivery_fee + request["order_taxes"] if ((order.delivery_type == "DELIVERY") and (total_cart_price < restaurant.free_delivery_price)) else 0
     order.delivery_fee = delivery_fee
     db.session.commit()
 
