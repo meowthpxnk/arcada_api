@@ -26,3 +26,7 @@ def qr_decline(call):
         reply_markup = None,
         parse_mode = "HTML",
     )
+
+@tg_bot.message_handler(commands=['id'])
+def start(message):
+    tg_bot.send_message(message.chat.id, f'Ваш ID: {message.chat.id}')
