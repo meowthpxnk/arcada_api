@@ -31,6 +31,7 @@ def createOrder(request):
     dishes = order["cart"]
     comment = order["comment"]
     delivery_type = order["delivery_type"]
+    delivery_time = str(order["delivery_time"])
 
 
     restaurant_link = order["link"]
@@ -59,7 +60,7 @@ def createOrder(request):
 
 
 
-    order = Order(customer.id, restaurant.id, comment, delivery_type, secret_key)
+    order = Order(customer.id, restaurant.id, comment, delivery_type, delivery_time, secret_key)
 
 
     db.session.add(order)
@@ -88,7 +89,7 @@ def createOrder(request):
     try:
         tg_bot.send_message(
             chat_id = restaurant.telegram_admin_id,
-            text = parseOrderCartText(dishes, user_data['phone'], user_data['name'], address_text, delivery_type, total_cart_price + delivery_fee, comment, restaurant_title),
+            text = parseOrderCartText(dishes, user_data['phone'], user_data['name'], address_text, delivery_type, delivery_time, total_cart_price + delivery_fee, comment, restaurant_title),
             parse_mode = "HTML"
         )
     except:

@@ -16,11 +16,27 @@ def parseOrderCart(cart):
         })
     return dump
 
-def parseOrderCartText(dishes, phone_number, name, address, delivery_type, total_amount, comment, restaurant_title):
+def parseOrderCartText(dishes, phone_number, name, address, delivery_type, delivery_time, total_amount, comment, restaurant_title):
     parsedCart = parseOrderCart(dishes)
 
 
     text = ""
+
+    is_delivery = True if delivery_type == "DELIVERY" else False
+
+    try:
+        if delivery_type == "DELIVERY":
+            if delivery_time == "DEFAULT":
+                delivery_time = "Ближайшее"
+            else:
+                minutes = int(delivery_time)%60
+                hours = int(delivery_time)//60
+                delivery_time = f"{hours}:{minutes}"
+    except:
+        delivery_time = "Неизвестное(ошибка)"
+
+
+    print(delivery_time)
 
     delivery_type = "Доставка" if delivery_type == "DELIVERY" else "Самовывоз"
 
@@ -28,13 +44,18 @@ def parseOrderCartText(dishes, phone_number, name, address, delivery_type, total
 
     text += f"<b>Ресторан</b>:\n{restaurant_title}\n\n"
     text += f"<b>Номер телефона</b>:\n{phone_number}\n\n"
+    name = name if name != None else "-------"
     text += f"<b>Имя заказчика</b>:\n{name}\n\n"
     text += f"<b>Тип заказа</b>:\n{delivery_type}\n\n"
+
+    if is_delivery:
+        text += f"<b>Время доставки</b>:\n{delivery_time}\n\n"
+
     text += f"<b>Стоимость заказа</b>:\n{total_amount}\n\n"
     if address:
         text += f"<b>Адрес доставки</b>:\n{address}\n\n"
 
-    comment = None if not comment else comment
+    comment = "-------" if not comment else comment
     text += f"<b>Комментарий</b>:\n{comment}\n\n"
 
     text += "<b>Блюда в заказе</b>\n"

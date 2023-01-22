@@ -14,8 +14,9 @@ class Order(db.Model):
     secret_key = db.Column(db.String)
     isPaidAfterGetted = db.Column(db.Boolean, default=False)
     paidTime = db.Column(db.Integer)
+    delivery_time = db.Column(db.String)
 
-    def __init__(self, customer_id, restaurant_id, comment, delivery_type, secret_key):
+    def __init__(self, customer_id, restaurant_id, comment, delivery_type, delivery_time, secret_key):
         self.customer_id = customer_id
         self.restaurant_id = restaurant_id
         self.comment = comment
@@ -28,6 +29,7 @@ class Order(db.Model):
             now_time -= 1440
         self.paidTime = now_time
         self.delivery_fee = 0
+        self.delivery_time = delivery_time
         # db.session.add(self)
         # db.session.commit()
 

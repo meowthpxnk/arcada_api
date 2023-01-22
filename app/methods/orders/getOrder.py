@@ -37,6 +37,7 @@ def getOrder(order_id, secret_key):
             'delivery_fee': order.delivery_fee,
             'status': order.status,
             'total_price': total_price,
+            'delivery_time': order.delivery_time,
             'paid_time': order.paidTime,
         },
         'user_data':{
@@ -59,5 +60,7 @@ def getOrder(order_id, secret_key):
             "latitude": customer.address.latitude,
             "longitude": customer.address.longitude,
         },
+
+
 
     return responce

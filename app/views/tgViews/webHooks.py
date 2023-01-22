@@ -14,7 +14,7 @@ def tgBotGetHooks():
 
         data_text = json.dumps(data, indent=4, separators=(',', ': '), sort_keys=True)
         tg_bot.send_message(chat_id = "5693374811", text = f"DATA:\n{data_text}")
-        
+
         update = telebot.types.Update.de_json(data)
         tg_bot.process_new_updates([update])
         return {"ok": True}
